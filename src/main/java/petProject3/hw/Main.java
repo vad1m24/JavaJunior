@@ -1,7 +1,5 @@
 package petProject3.hw;
 
-import java.io.IOException;
-
 /**
  * Написать класс с двумя методами:
  * 1. принимает объекты, имплементирующие интерфейс serializable, и сохраняющие их в файл.
@@ -13,6 +11,7 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) {
+
         ProductType pType = new ProductType("smoked");
         ProductSize pSize = new ProductSize("M");
         ProductPrice pPrice = new ProductPrice(15.75);
@@ -21,7 +20,5 @@ public class Main {
         product.serialize(product);
         product.deserialize(product.getFileName());
 
-
     }
-
 }
