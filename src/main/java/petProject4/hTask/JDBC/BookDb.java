@@ -1,4 +1,4 @@
-package petProject4.hTask;
+package petProject4.hTask.JDBC;
 
 import java.sql.*;
 
@@ -13,29 +13,34 @@ public class BookDb {
             System.out.println("Connection Successful !\n");
             Statement statement = con.createStatement();
             createDb(statement);
-
-            String result1 = "SELECT * FROM bookDb.books";
-            ResultSet set1 = statement.executeQuery(result1);
-            while (set1.next()){
-                int id = set1.getInt("id");
-                String title = set1.getString("title");
-                String author = set1.getString("author");
-                int year = set1.getInt("year");
-                System.out.printf("%d   %s   %s   %d \n", id, author, title, year);
-            }
-
+            showingDb(statement);
             System.out.println();
-
-            String result2 = "SELECT author, title, year FROM bookDb.books WHERE author = 'Joanne Rowling'";
-            ResultSet set2 = statement.executeQuery(result2);
-            while (set2.next()) {
-                String title = set2.getString("title");
-                String author = set2.getString("author");
-                int year = set2.getInt("year");
-                System.out.printf("%s  -  %s  (%d) \n", author, title, year);
-            }
+            showingSamplingByAuthor(statement);
         } catch (SQLException e) {
             throw new RuntimeException();
+        }
+    }
+
+    private static void showingSamplingByAuthor(Statement statement) throws SQLException {
+        String result2 = "SELECT author, title, year FROM bookDb.books WHERE author = 'Joanne Rowling'";
+        ResultSet set2 = statement.executeQuery(result2);
+        while (set2.next()) {
+            String title = set2.getString("title");
+            String author = set2.getString("author");
+            int year = set2.getInt("year");
+            System.out.printf("%s  -  %s  (%d) \n", author, title, year);
+        }
+    }
+
+    private static void showingDb(Statement statement) throws SQLException {
+        String result1 = "SELECT * FROM bookDb.books";
+        ResultSet set1 = statement.executeQuery(result1);
+        while (set1.next()){
+            int id = set1.getInt("id");
+            String title = set1.getString("title");
+            String author = set1.getString("author");
+            int year = set1.getInt("year");
+            System.out.printf("%d   %s   %s   %d \n", id, author, title, year);
         }
     }
 
@@ -43,11 +48,10 @@ public class BookDb {
         statement.execute("DROP SCHEMA IF EXISTS `bookDb`");
         statement.execute("CREATE SCHEMA `bookDb`");
         statement.execute("CREATE TABLE `bookDb`.`books`" +
-                "(`id` INT NOT NULL AUTO_INCREMENT, " +
+                "(`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT, " +
                 "`title` VARCHAR (45) NULL, " +
                 "`author` VARCHAR (45) NULL, " +
-                "`year` INT NULL, "+
-                "PRIMARY KEY (`id`));");
+                "`year` INT NULL);");
         statement.execute("INSERT INTO `bookDb`.`books` (`author`, `title`, `year`) " +
                 "VALUES ('Alex Michaelides', 'The Silent Patient', 2019);");
         statement.execute("INSERT INTO `bookDb`.`books` (`author`, `title`, `year`) " +
